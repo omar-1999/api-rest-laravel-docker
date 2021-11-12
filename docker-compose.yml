@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:12.5
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_DB: laravel
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 102030
+    ports:
+      - 5433:5432
+    volumes:
+      - ./pgsql:/var/lib/pgsql
+    networks:
+      - laravel
+
+  api_rest_laravel:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+    container_name: api_rest_laravel
+    volumes:
+      - ./:/var/www/html:cached
+    ports:
+      - 8080:80
+    networks:
+      - laravel
+
+networks:
+  laravel:
